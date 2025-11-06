@@ -45,4 +45,18 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    public function groups()
+    {
+        return $this->belongsToMany(Group::class, 'user_group');
+    }
+    public function hasPermission($permission)
+    {
+        foreach ($this->groups as $group) {
+            if ($group->permissions()->where('name', $permission)->exists()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
