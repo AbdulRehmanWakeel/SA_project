@@ -29,13 +29,13 @@
 
         <div class="mb-3">
             <label>Role:</label>
-            <select name="group_id" class="form-control" required>
+            <select name="role_id" class="form-control" required>
                 <option value="">-- Select Role --</option>
-                @foreach ($groups as $group)
-                    <option value="{{ $group->id }}" 
-                        {{ $user->groups->first() && $user->groups->first()->id == $group->id ? 'selected' : '' }}>
-                        {{ ucfirst($group->name) }}
-                    </option>
+                @foreach ($roles as $role)
+                <option value="{{ $role->id }}" 
+                    {{ $user->role && $user->role->id == $role->id ? 'selected' : '' }}>
+                    {{ ucfirst($role->name) }}
+                </option>
                 @endforeach
             </select>
         </div>

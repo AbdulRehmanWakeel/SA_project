@@ -19,33 +19,27 @@ Route::middleware('auth')->group(function () {
 });
 
  
-// View
-Route::middleware(['auth', 'permission:view_contacts'])
-    ->get('/contacts', [ContactController::class, 'index'])
-    ->name('contacts.index');
+Route::middleware(['auth'])->group(function () {
 
-// Create
-Route::middleware(['auth', 'permission:create_contacts'])
-    ->get('/contacts/create', [ContactController::class, 'create'])
-    ->name('contacts.create');
+    Route::middleware('permission:view_contacts')->group(function () {
+        Route::get('/contacts', [ContactController::class, 'index'])->name('contacts.index');
+    });
 
-Route::middleware(['auth', 'permission:create_contacts'])
-    ->post('/contacts', [ContactController::class, 'store'])
-    ->name('contacts.store');
+    Route::middleware('permission:create_contacts')->group(function () {
+        Route::get('/contacts/create', [ContactController::class, 'create'])->name('contacts.create');
+        Route::post('/contacts', [ContactController::class, 'store'])->name('contacts.store');
+    });
 
-// Edit
-Route::middleware(['auth', 'permission:edit_contacts'])
-    ->get('/contacts/{contact}/edit', [ContactController::class, 'edit'])
-    ->name('contacts.edit');
+    Route::middleware('permission:edit_contacts')->group(function () {
+        Route::get('/contacts/{contact}/edit', [ContactController::class, 'edit'])->name('contacts.edit');
+        Route::put('/contacts/{contact}', [ContactController::class, 'update'])->name('contacts.update');
+    });
 
-Route::middleware(['auth', 'permission:edit_contacts'])
-    ->put('/contacts/{contact}', [ContactController::class, 'update'])
-    ->name('contacts.update');
+    Route::middleware('permission:delete_contacts')->group(function () {
+        Route::delete('/contacts/{contact}', [ContactController::class, 'destroy'])->name('contacts.destroy');
+    });
 
-// Delete
-Route::middleware(['auth', 'permission:delete_contacts'])
-    ->delete('/contacts/{contact}', [ContactController::class, 'destroy'])
-    ->name('contacts.destroy');
+});
 
 require __DIR__.'/auth.php';
 

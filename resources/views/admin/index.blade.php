@@ -21,7 +21,7 @@
                     <td>{{ $user->id }}</td>
                     <td>{{ $user->name }}</td>
                     <td>{{ $user->email }}</td>
-                    <td>{{ optional($user->groups->first())->name }}</td>
+                    <td>{{ optional($user->role)->name }}</td>
                     <td>
                         <a href="{{ route('users.edit', $user->id) }}" class="btn btn-sm btn-warning">Edit</a>
                         <form action="{{ route('users.destroy', $user->id) }}" method="POST" style="display:inline-block;">
