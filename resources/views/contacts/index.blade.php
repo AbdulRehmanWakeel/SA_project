@@ -16,13 +16,30 @@
 <table class="table table-bordered table-striped">
     <thead>
         <tr>
-            <th>ID</th><th>Name</th><th>Email</th><th>Message</th><th>Actions</th>
+            <th>ID</th>
+            <th>Image</th>  
+            <th>Name</th>
+            <th>Email</th>
+            <th>Message</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
         @foreach($contacts as $contact)
         <tr>
             <td>{{ $loop->iteration }}</td>
+
+             
+            <td>
+                @if($contact->image)
+                    <img src="{{ asset('storage/' . $contact->image) }}" 
+                         alt="{{ $contact->name }}" 
+                         width="60" height="60" class="rounded">
+                @else
+                    <span class="text-muted">No Image</span>
+                @endif
+            </td>
+
             <td>{{ $contact->name }}</td>
             <td>{{ $contact->email }}</td>
             <td>{{ $contact->message }}</td>
@@ -41,7 +58,6 @@
 <div class="d-flex justify-content-center mt-3">
     {{ $contacts->links('pagination::bootstrap-5') }}
 </div>
-
 
 @else
 <p>No contacts found.</p>

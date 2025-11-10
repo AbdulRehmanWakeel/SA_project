@@ -5,7 +5,8 @@
 <div class="card shadow-sm">
   <div class="card-body">
     <h3 class="mb-3">Add New Contact</h3>
-    <form method="POST" action="{{ route('contacts.store') }}" novalidate>
+
+    <form method="POST" action="{{ route('contacts.store') }}" enctype="multipart/form-data" novalidate>
         @csrf
 
         <div class="mb-3">
@@ -28,10 +29,15 @@
             @error('message')<div class="invalid-feedback">{{ $message }}</div>@enderror
         </div>
 
+        <div class="mb-3">
+            <label class="form-label">Contact Image</label>
+            <input type="file" name="image" class="form-control @error('image') is-invalid @enderror" accept="image/*">
+            @error('image')<div class="invalid-feedback">{{ $message }}</div>@enderror
+        </div>
+
         <button type="submit" class="btn btn-success">Save</button>
         <a href="{{ route('contacts.index') }}" class="btn btn-secondary">Back</a>
     </form>
   </div>
 </div>
-
 @endsection

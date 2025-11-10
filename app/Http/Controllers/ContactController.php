@@ -1,10 +1,12 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Contact;
 use App\Http\Requests\ContactRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class ContactController extends Controller
 {
@@ -36,6 +38,12 @@ class ContactController extends Controller
     {
         $validated = $request->validated();
         $validated['user_id'] = Auth::id();
+
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('contacts');  
+            $validated['image'] = $imagePath;   
+        }
+
         Contact::create($validated);
 
         return redirect()->route('contacts.index')->with('success', 'Contact created successfully!');
@@ -48,17 +56,30 @@ class ContactController extends Controller
 
     public function update(ContactRequest $request, Contact $contact)
     {
-        $contact->update($request->validated());
+        $validated = $request->validated();
+
+        if ($request->hasFile('image')) {
+            if ($contact->image && Storage::exists($contact->image)) {
+                Storage::delete($contact->image);
+            }
+
+            $imagePath = $request->file('image')->store('contacts');   
+            $validated['image'] = $imagePath;   
+        }
+
+        $contact->update($validated);
 
         return redirect()->route('contacts.index')->with('success', 'Contact updated successfully!');
     }
 
     public function destroy(Contact $contact)
     {
+        if ($contact->image && Storage::exists($contact->image)) {
+            Storage::delete($contact->image);
+        }
+
         $contact->delete();
 
         return redirect()->route('contacts.index')->with('success', 'Contact deleted successfully!');
     }
-
-     
 }

@@ -24,7 +24,8 @@ class ContactRequest extends FormRequest
         return [
             "name"=> "required|string|max:250",
             'email' => 'required|email|max:255|unique:contacts,email',
-            "message"=>"required|string|max:1000"
+            "message"=>"required|string|max:1000",
+            "image"=>'nullable|image|mimes:png,jpg,gif|max:2048'
         ];
     }
     public function messages(): array

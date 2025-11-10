@@ -5,7 +5,8 @@
 <div class="card shadow-sm">
   <div class="card-body">
     <h3 class="mb-3">Edit Contact</h3>
-    <form method="POST" action="{{ route('contacts.update', $contact) }}" novalidate>
+    
+    <form method="POST" action="{{ route('contacts.update', $contact) }}" enctype="multipart/form-data" novalidate>
         @csrf
         @method('PUT')
 
@@ -29,10 +30,22 @@
             @error('message')<div class="invalid-feedback">{{ $message }}</div>@enderror
         </div>
 
+        <div class="mb-3">
+            <label class="form-label">Image</label>
+            <input type="file" name="image" class="form-control @error('image') is-invalid @enderror" accept="image/*">
+            @error('image')<div class="invalid-feedback">{{ $message }}</div>@enderror
+
+            @if($contact->image)
+                <div class="mt-2">
+                    <img src="{{ asset('storage/' . $contact->image) }}" alt="Contact Image" width="120" class="img-thumbnail">
+                    <p class="text-muted small mt-1">Current image</p>
+                </div>
+            @endif
+        </div>
+
         <button type="submit" class="btn btn-success">Update</button>
         <a href="{{ route('contacts.index') }}" class="btn btn-secondary">Back</a>
     </form>
   </div>
 </div>
-
 @endsection
